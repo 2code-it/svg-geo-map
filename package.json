@@ -1,31 +1,31 @@
 {
   "name": "svg-geo-map",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "display svg elements on geographics using gps coords",
-  "type": "module",
-  "main": "./dist/svg-geo-map.js",
-  "scripts": {
-    "samples": "vite serve samples",
-    "test": "vitest",
-    "build": "vite build",
-    "prepublishOnly": "vite build"
-  },
+  "author": "2code",
+  "license": "BSD-2-Clause",
   "keywords": [
+    "svg",
     "geo",
     "map",
-    "svg",
     "gps",
     "coords"
   ],
-  "author": "2code",
-  "license": "BSD-2-Clause",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "build": "vite build",
+    "samples": "vite serve samples"
+  },
   "devDependencies": {
-    "jsdom": "24.0.0",
+    "typescript": "^5.2.2",
     "vite": "5.1.6",
     "vitest": "1.4.0",
+    "vite-plugin-dts": "3.8.1",
+    "jsdom": "24.0.0",
     "vue": "^3.4.21",
     "vue-tsc": "^2.0.6",
-    "typescript": "^5.2.2",
     "@vitejs/plugin-vue": "^5.0.4"
   },
   "repository": {
