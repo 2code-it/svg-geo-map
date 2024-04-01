@@ -1,6 +1,6 @@
 {
   "name": "svg-geo-map",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "display svg elements on geographics using gps coords",
   "author": "2code",
   "license": "BSD-2-Clause",
@@ -12,6 +12,10 @@
     "coords"
   ],
   "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "vitest",
