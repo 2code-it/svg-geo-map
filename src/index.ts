@@ -1,6 +1,5 @@
-import { GeoMap } from "./GeoMap";
-import { GeoUtil } from "./GeoUtil";
-import { DomUtil } from "./DomUtil";
-import { SvgPathBuilder } from "./SvgPathBuilder";
-
-export { GeoMap, GeoUtil, DomUtil, SvgPathBuilder };
+export * from "./GeoMap";
+export * from "./GeoUtil";
+export * from "./SvgAnimationFactory";
+export * from "./SvgPathBuilder";
+export * from "./SvgShapeFactory";

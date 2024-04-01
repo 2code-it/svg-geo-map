@@ -1,6 +1,6 @@
 import { DomUtil } from './DomUtil';
 
-type restartOption = 'always' | 'whenNotActive' | 'never';
+export type SvgAnimationRestartOption = 'always' | 'whenNotActive' | 'never';
 
 export interface IAnimationAttributeOptions {
     attributeName: string,
@@ -9,7 +9,7 @@ export interface IAnimationAttributeOptions {
     dur?: number,
     min?: number,
     max?: number,
-    restart?: restartOption
+    restart?: SvgAnimationRestartOption
     repeat?: number | string
     repeatDur?: number,
     values?: number[],

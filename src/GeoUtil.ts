@@ -1,5 +1,5 @@
 
-export interface IGeoUtilOptions {
+interface IGeoUtilInternalOptions {
     latitudeBegin: number,
     latitudeEnd: number,
     longitudeBegin: number,
@@ -9,7 +9,7 @@ export interface IGeoUtilOptions {
     viewHeight: number
 }
 
-export interface IGeoUtilOptionalOptions {
+export interface IGeoUtilOptions {
     latitudeBegin?: number,
     latitudeEnd?: number,
     longitudeBegin?: number,
@@ -20,7 +20,7 @@ export interface IGeoUtilOptionalOptions {
 }
 
 
-const defaultGeoUtilOptions: IGeoUtilOptions = {
+const defaultGeoUtilOptions: IGeoUtilInternalOptions = {
     latitudeBegin: 90,
     latitudeEnd: -90,
     longitudeBegin: -180,
@@ -42,11 +42,11 @@ export interface IViewCoords {
 
 export class GeoUtil {
 
-    public constructor(options?: IGeoUtilOptionalOptions) {
+    public constructor(options?: IGeoUtilOptions) {
         this.configure(options ?? {});
     }
 
-    private _options: IGeoUtilOptions = GeoUtil.getDefaultOptions();
+    private _options: IGeoUtilInternalOptions = GeoUtil.getDefaultOptions();
     private _totalDegreesLatitude = 0;
     private _totalDegreesLongitude = 0;
     private _degreesPerPixelX = 0;
@@ -132,18 +132,18 @@ export class GeoUtil {
         return { ...this._options };
     }
 
-    public configure(options: IGeoUtilOptionalOptions) {
-        const newOptions: IGeoUtilOptions = { ...this._options, ...options };
+    public configure(options: IGeoUtilOptions) {
+        const newOptions: IGeoUtilInternalOptions = { ...this._options, ...options };
         this._throwOnInvalidOptions(newOptions);
         this._options = newOptions;
         this._updateTotals(newOptions);
     }
 
-    public static getDefaultOptions(): IGeoUtilOptions {
+    public static getDefaultOptions(): IGeoUtilInternalOptions {
         return { ...defaultGeoUtilOptions };
     }
 
-    private _updateTotals(options: IGeoUtilOptions) {
+    private _updateTotals(options: IGeoUtilInternalOptions) {
         this._totalDegreesLatitude = -options.latitudeBegin + options.latitudeEnd;
         this._totalDegreesLongitude = -options.longitudeBegin + options.longitudeEnd;
         this._degreesPerPixelX = this._totalDegreesLongitude / options.viewWidth;
@@ -166,7 +166,7 @@ export class GeoUtil {
             throw new Error(`Longitude out of range ${this._options.longitudeBegin}-${this._options.longitudeEnd}`);
     }
 
-    private _throwOnInvalidOptions(options: IGeoUtilOptions) {
+    private _throwOnInvalidOptions(options: IGeoUtilInternalOptions) {
         if (!GeoUtil._isBetween(options.latitudeBegin, -90, 90)) throw new Error(`Option latitudeBegin ${options.latitudeBegin} is out of range -90-90`);
         if (!GeoUtil._isBetween(options.latitudeEnd, -90, 90)) throw new Error(`Option latitudeEnd ${options.latitudeEnd} is out of range -90-90`);
         if (!GeoUtil._isBetween(options.longitudeBegin, -180, 180)) throw new Error(`Option longitudeBegin ${options.longitudeBegin} is out of range -180-180`);

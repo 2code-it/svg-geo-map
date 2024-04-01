@@ -3,16 +3,16 @@ export interface IEventArgs<T> {
     source: T;
 }
 
-export type eventListener<T> = (eventArgs: IEventArgs<T>) => void;
+export type EventListener2<T> = (eventArgs: IEventArgs<T>) => void;
 
 export class EventManager<T>{
-    public constructor(source?: T, eventNames?: string[]) {
-        if (source != undefined) this.source = source;
+    public constructor(source: T, eventNames?: string[]) {
+        this._source = source;
         if (eventNames != undefined) this.eventNames = eventNames;
     }
 
-    private _events: { [key: string]: eventListener<T>[] } = {};
-    public source: T;
+    private _events: { [key: string]: EventListener2<T>[] } = {};
+    private _source: T;
 
     public get eventNames(): string[] {
         return Object.keys(this._events);
@@ -20,15 +20,15 @@ export class EventManager<T>{
 
     public set eventNames(value: string[]) {
         this._events = {};
-        value.forEach(x => { this._events[x] = new Array<eventListener<T>>(); });
+        value.forEach(x => { this._events[x] = new Array<EventListener2<T>>(); });
     }
 
-    public addEventListener(eventName: string, listener: eventListener<T>) {
+    public addEventListener(eventName: string, listener: EventListener2<T>) {
         this._throwOnUnknowEventName(eventName);
         this._events[eventName].push(listener);
     }
 
-    public removeEventListener(eventName: string, listener: eventListener<T>) {
+    public removeEventListener(eventName: string, listener: EventListener2<T>) {
         this._throwOnUnknowEventName(eventName);
         const fnIndex = this._events[eventName].indexOf(listener);
         if (fnIndex != -1) this._events[eventName].splice(fnIndex, 1);
@@ -36,7 +36,7 @@ export class EventManager<T>{
 
     public raiseEvent(eventName: string, eventArgs: any) {
         this._throwOnUnknowEventName(eventName);
-        const args = { source: this.source, ...eventArgs };
+        const args = { source: this._source, ...eventArgs };
         this._events[eventName].forEach(x => x(args));
     }
 

@@ -1,5 +1,5 @@
-import { GeoUtil, IGeoUtilOptionalOptions, IGeoCoords, IViewCoords } from './GeoUtil';
-import { EventManager, eventListener } from './EventManager';
+import { GeoUtil, IGeoUtilOptions, IGeoCoords } from './GeoUtil';
+import { EventManager, EventListener2 } from './EventManager';
 import { DomUtil } from './DomUtil';
 import { SvgShapeFactory } from './SvgShapeFactory';
 import { SvgAnimationFactory } from './SvgAnimationFactory';
@@ -13,7 +13,7 @@ export interface IGeoMapOptions {
     containerId?: string,
     imageSource?: string,
     enableDragToScroll?: boolean,
-    geoUtilOptions?: IGeoUtilOptionalOptions
+    geoUtilOptions?: IGeoUtilOptions
 };
 
 const defaultGeoMapOptions: IGeoMapOptions = {
@@ -184,8 +184,8 @@ export class GeoMap {
 
     public enableDragToScroll = () => DomUtil.enableDragToScroll(this._svgElement);
     public disableDragToScroll = () => DomUtil.disableDragToScroll(this._svgElement);
-    public addEventListener = (eventName: string, listener: eventListener<GeoMap>) => this._eventManager.addEventListener(eventName, listener);
-    public removeEventListener = (eventName: string, listener: eventListener<GeoMap>) => this._eventManager.removeEventListener(eventName, listener);
+    public addEventListener = (eventName: string, listener: EventListener2<GeoMap>) => this._eventManager.addEventListener(eventName, listener);
+    public removeEventListener = (eventName: string, listener: EventListener2<GeoMap>) => this._eventManager.removeEventListener(eventName, listener);
     public createAnimationFactory() {
         return new SvgAnimationFactory(this._svgElement.getCurrentTime());
     }
