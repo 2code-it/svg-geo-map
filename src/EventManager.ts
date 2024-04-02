@@ -5,42 +5,28 @@ export interface IEventArgs<T> {
 
 export type EventListener2<T> = (eventArgs: IEventArgs<T>) => void;
 
-export class EventManager<T>{
-    public constructor(source: T, eventNames?: string[]) {
+export class EventManager<Tsource, TeventName extends string>{
+    public constructor(source: Tsource) {
         this._source = source;
-        if (eventNames != undefined) this.eventNames = eventNames;
     }
 
-    private _events: { [key: string]: EventListener2<T>[] } = {};
-    private _source: T;
+    private _events: { [key: string]: EventListener2<Tsource>[] } = {};
+    private _source: Tsource;
 
-    public get eventNames(): string[] {
-        return Object.keys(this._events);
-    }
-
-    public set eventNames(value: string[]) {
-        this._events = {};
-        value.forEach(x => { this._events[x] = new Array<EventListener2<T>>(); });
-    }
-
-    public addEventListener(eventName: string, listener: EventListener2<T>) {
-        this._throwOnUnknowEventName(eventName);
+    public addEventListener(eventName: TeventName, listener: EventListener2<Tsource>) {
+        if (!(eventName in this._events)) this._events[eventName] = [];
         this._events[eventName].push(listener);
     }
 
-    public removeEventListener(eventName: string, listener: EventListener2<T>) {
-        this._throwOnUnknowEventName(eventName);
+    public removeEventListener(eventName: TeventName, listener: EventListener2<Tsource>) {
+        if (!(eventName in this._events)) return;
         const fnIndex = this._events[eventName].indexOf(listener);
         if (fnIndex != -1) this._events[eventName].splice(fnIndex, 1);
     }
 
-    public raiseEvent(eventName: string, eventArgs: any) {
-        this._throwOnUnknowEventName(eventName);
+    public raiseEvent(eventName: TeventName, eventArgs: any) {
+        if (!(eventName in this._events)) return;
         const args = { source: this._source, ...eventArgs };
         this._events[eventName].forEach(x => x(args));
-    }
-
-    private _throwOnUnknowEventName(eventName: string) {
-        if (!(eventName in this._events)) throw Error(`Unknown event name, available event names: ${Object.keys(this._events).join(',')}`);
     }
 }

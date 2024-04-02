@@ -23,21 +23,22 @@ const defaultGeoMapOptions: IGeoMapOptions = {
     geoUtilOptions: GeoUtil.getDefaultOptions()
 };
 
+type GeoMapEvent = 'beforeappendshape' | 'afterappendshape';
+
 export class GeoMap {
 
-    constructor(options?: IGeoMapOptions, geoUtil?: GeoUtil, domUtil?: DomUtil, svgShapeFactory?: SvgShapeFactory, eventManager?: EventManager<GeoMap>) {
+    constructor(options?: IGeoMapOptions, geoUtil?: GeoUtil, domUtil?: DomUtil, svgShapeFactory?: SvgShapeFactory, eventManager?: EventManager<GeoMap, GeoMapEvent>) {
         this._geoUtil = geoUtil ?? new GeoUtil();
         this._domUtil = domUtil ?? new DomUtil();
         this._svgShapeFactory = svgShapeFactory ?? new SvgShapeFactory(this._domUtil, this.geoUtil);
-        this._eventManager = eventManager ?? new EventManager<GeoMap>(this, GeoMap._eventNames);
+        this._eventManager = eventManager ?? new EventManager<GeoMap, GeoMapEvent>(this);
         this._svgElement = this._createSvgElement();
         this.configure(options ?? GeoMap.getDefaultOptions());
     }
 
-    private static _eventNames = ['beforeappendshape', 'afterappendshape'];
     private _geoUtil: GeoUtil;
     private _domUtil: DomUtil;
-    private _eventManager: EventManager<GeoMap>;
+    private _eventManager: EventManager<GeoMap, GeoMapEvent>;
     private _svgShapeFactory: SvgShapeFactory;
     private _options: IGeoMapOptions = GeoMap.getDefaultOptions();
 
@@ -184,8 +185,8 @@ export class GeoMap {
 
     public enableDragToScroll = () => DomUtil.enableDragToScroll(this._svgElement);
     public disableDragToScroll = () => DomUtil.disableDragToScroll(this._svgElement);
-    public addEventListener = (eventName: string, listener: EventListener2<GeoMap>) => this._eventManager.addEventListener(eventName, listener);
-    public removeEventListener = (eventName: string, listener: EventListener2<GeoMap>) => this._eventManager.removeEventListener(eventName, listener);
+    public addEventListener = (eventName: GeoMapEvent, listener: EventListener2<GeoMap>) => this._eventManager.addEventListener(eventName, listener);
+    public removeEventListener = (eventName: GeoMapEvent, listener: EventListener2<GeoMap>) => this._eventManager.removeEventListener(eventName, listener);
     public createAnimationFactory() {
         return new SvgAnimationFactory(this._svgElement.getCurrentTime());
     }
