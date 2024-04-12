@@ -188,7 +188,7 @@ export class GeoMap {
     public addEventListener = (eventName: GeoMapEvent, listener: EventListener2<GeoMap>) => this._eventManager.addEventListener(eventName, listener);
     public removeEventListener = (eventName: GeoMapEvent, listener: EventListener2<GeoMap>) => this._eventManager.removeEventListener(eventName, listener);
     public createAnimationFactory() {
-        return new SvgAnimationFactory(this._svgElement.getCurrentTime());
+        return new SvgAnimationFactory(this._svgElement);
     }
 
     public static getDefaultOptions() {

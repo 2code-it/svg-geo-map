@@ -23,14 +23,14 @@ export interface IAnimationAttributeOptions {
 
 
 export class SvgAnimationFactory {
-    constructor(svgElementTime: number, domUtil?: DomUtil) {
-        this._startTime = Date.now() - Math.round(svgElementTime * 1000);
+    constructor(svgElement: SVGSVGElement, domUtil?: DomUtil) {
+        this._svgElement = svgElement;
         this._domUtil = domUtil ?? new DomUtil();
     }
 
     private static _timeInSecondsOptions = ['begin', 'end', 'dur', 'min', 'max'];
     private _domUtil: DomUtil;
-    private _startTime: number;
+    private _svgElement: SVGSVGElement;
 
     public animateLine(line: SVGLineElement, duration = 5, removeAtEnd = false) {
         const attr = DomUtil.getElementAttributes(line, ['x1', 'y1', 'x2', 'y2']);
@@ -46,12 +46,12 @@ export class SvgAnimationFactory {
     }
 
     public create(options: IAnimationAttributeOptions): SVGAnimateElement {
-        const attr = SvgAnimationFactory._getAttributesFromOptions(options, this._getCurrentTime());
+        const attr = this._getAttributesFromOptions(options);
         return <SVGAnimateElement>this._domUtil.createElementSvg('animate', attr);
     }
 
-    private static _getAttributesFromOptions(options: IAnimationAttributeOptions, currentTime = 0): any {
-        const begin = options.begin ?? Math.floor(currentTime / 100) / 10 - 0.2;
+    private _getAttributesFromOptions(options: IAnimationAttributeOptions): any {
+        const begin = options.begin ?? this._getCurrentTime() - 0.2;
         const values: string | undefined = options.values != undefined ? options.values.map(x => x.toString()).join(';') : undefined;
         const keyTimes: string | undefined = options.keyTimes != undefined ? options.keyTimes.map(x => x.toString()).join(';') : undefined;
         let keySplines: string | undefined;
@@ -71,5 +71,5 @@ export class SvgAnimationFactory {
         return attr;
     }
 
-    private _getCurrentTime = () => Date.now() - this._startTime;
+    private _getCurrentTime = () => Math.round(this._svgElement.getCurrentTime() * 100) / 100;
 }
